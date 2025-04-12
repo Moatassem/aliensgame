@@ -13,16 +13,20 @@ onready var bulletPosition = get_node("AlienBulletPosition")
 
 func _ready():
 	animation.play("Run")
-	shoot()  # start shooting immediately
+	shoot()
 
 func _process(delta):
+	if isDead or not visible:
+		return
 	if not isDead:
 		translate(Vector2(-speed * delta, 0))
 	if health <= 0:
 		die()
+		return
 	if position.x <= 39:
-		if gameManager.decreaseHealth():
+		if gameManager.decreaseLives():
 			get_tree().change_scene("res://Scenes/ResultScene.tscn")
+			return
 		reset()
 
 func die():
@@ -49,6 +53,7 @@ func shoot():
 		bullet.position = bulletPosition.get_global_position()
 		get_parent().add_child(bullet)
 		yield(get_tree().create_timer(2.5), "timeout")
+		
 
 func hit():
 	health -= 25

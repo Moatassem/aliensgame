@@ -3,6 +3,7 @@ extends Node2D
 onready var animatedSprite=get_node("AnimatedSprite")
 var bulletScene=preload("res://Scenes/Bullet.tscn")
 onready var bulletPosition=get_node("BulletPosition")
+onready var gameManager = get_parent()
 var isShooting=false
 
 func _ready():
@@ -18,16 +19,10 @@ func _process(delta):
 		if isShooting==false:
 			Shoot()
 	
-			
-	if Input.is_key_pressed(KEY_W):
+	
+	if Input.is_key_pressed(KEY_UP) and gameManager.is_inside_screen(position):
 		translate(Vector2(0,-1))
-	if Input.is_key_pressed(KEY_S):
-		translate(Vector2(0,1))
-		
-			
-	if Input.is_key_pressed(KEY_UP):
-		translate(Vector2(0,-1))
-	if Input.is_key_pressed(KEY_DOWN):
+	if Input.is_key_pressed(KEY_DOWN) and gameManager.is_inside_screen(position):
 		translate(Vector2(0,1))
 	
 
@@ -43,6 +38,10 @@ func Shoot():
 	bullet.position=bulletPosition.get_global_position()
 	get_parent().add_child(bullet)
 	isShooting=true
-	
 	yield(get_tree().create_timer(0.5),"timeout")
 	isShooting=false
+
+func hit():
+	if gameManager.decreaseCharacterHealth():
+		get_tree().change_scene("res://Scenes/ResultScene.tscn")
+	
