@@ -1,31 +1,43 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Sprites/Bullets/Hero Bullet1.png" type="Texture" id=1]
 [ext_resource path="res://Sprites/Bullets/Hero Bullet2.png" type="Texture" id=2]
 [ext_resource path="res://Sprites/Bullets/Hero Bullet3.png" type="Texture" id=3]
-[ext_resource path="res://Scenes/AlienBullet.gd" type="Script" id=4]
+[ext_resource path="res://Scripts/AlienBullet.gd" type="Script" id=4]
+[ext_resource path="res://Sprites/Bullets/alienbullet.png" type="Texture" id=5]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ) ],
-"loop": true,
+"loop": false,
 "name": "default",
 "speed": 20.0
+}, {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "New Anim",
+"speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=2]
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 55.0
+height = 95.0
 
 [node name="AlienBullet" type="Node2D"]
-scale = Vector2( 0.4, 0.4 )
+rotation = -10.378
+scale = Vector2( 0.0799996, 0.0800004 )
 script = ExtResource( 4 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
+rotation = 1.52848
+scale = Vector2( 0.299999, 0.199999 )
 frames = SubResource( 1 )
-frame = 1
+animation = "New Anim"
 playing = true
 
-[node name="Area2D" type="Area2D" parent="Sprite"]
+[node name="Area2D" type="Area2D" parent="."]
+rotation = 1.52317
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 2 )
-[connection signal="area_entered" from="Sprite/Area2D" to="." method="_on_Area2D_area_entered"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

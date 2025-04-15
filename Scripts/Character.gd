@@ -4,6 +4,7 @@ onready var animatedSprite=get_node("AnimatedSprite")
 var bulletScene=preload("res://Scenes/Bullet.tscn")
 onready var bulletPosition=get_node("BulletPosition")
 onready var gameManager = get_parent()
+onready var city = gameManager.get_node("City")
 var isShooting=false
 
 func _ready():
@@ -19,10 +20,9 @@ func _process(delta):
 		if isShooting==false:
 			Shoot()
 	
-	
-	if Input.is_key_pressed(KEY_UP) and gameManager.is_inside_screen(position):
+	if Input.is_key_pressed(KEY_W) and not city.HitTopBoundary:
 		translate(Vector2(0,-1))
-	if Input.is_key_pressed(KEY_DOWN) and gameManager.is_inside_screen(position):
+	if Input.is_key_pressed(KEY_S) and not city.HitBottomBoundary:
 		translate(Vector2(0,1))
 	
 
@@ -30,10 +30,9 @@ func _on_AnimatedSprite_animation_finished():
 	animatedSprite.play("Fly")
 
 
-
 func Shoot():
-	animatedSprite.play("Shoot")	
-	$AudioStreamPlayer2D.play()
+	animatedSprite.play("Shoot")
+	$ShootSound.play()
 	var bullet=bulletScene.instance()
 	bullet.position=bulletPosition.get_global_position()
 	get_parent().add_child(bullet)
@@ -41,7 +40,14 @@ func Shoot():
 	yield(get_tree().create_timer(0.5),"timeout")
 	isShooting=false
 
-func hit():
-	if gameManager.decreaseCharacterHealth():
+func Hit(damage):
+	$HitSound.play()
+	if gameManager.decreaseCharacterHealth(damage):
 		get_tree().change_scene("res://Scenes/ResultScene.tscn")
 	
+
+# when alien hits hero
+func _on_Area2D_area_entered(area):
+	var parent = area.get_parent()
+	if "hitDamage" in self.get_parent() and parent.is_in_group("Aliens"):
+		Hit(self.get_parent().hitDamage)

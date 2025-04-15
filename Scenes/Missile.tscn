@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Sprites/Missiles/giphy_1.png" type="Texture" id=1]
+[ext_resource path="res://Sprites/Missiles/giphy_3.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Missiles/giphy_2.png" type="Texture" id=3]
+[ext_resource path="res://Scripts/Missile.gd" type="Script" id=4]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "New Anim",
+"speed": 15.0
+} ]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 10.6
+
+[node name="Missile" type="Node2D"]
+rotation = -0.785397
+scale = Vector2( 0.4, 0.4 )
+script = ExtResource( 4 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+position = Vector2( -0.701538, 0 )
+rotation = 0.00565742
+scale = Vector2( 0.24444, 0.18396 )
+frames = SubResource( 1 )
+animation = "New Anim"
+playing = true
+
+[node name="Area2D" type="Area2D" parent="."]
+rotation = 0.759433
+scale = Vector2( 1.28237, 4.62902 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 2 )
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

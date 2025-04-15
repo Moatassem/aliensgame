@@ -1,7 +1,7 @@
 extends Node2D
 
 const maxCityLives = 5
-const maxHealth = 200
+const maxHealth = 500
 
 
 var score=0
@@ -29,8 +29,8 @@ func decreaseLives():
 	livesBar.text = "Lives " + str(currentCityLives)
 	return currentCityLives <= 0
 
-func decreaseCharacterHealth():
-	currentHealth -= 20
+func decreaseCharacterHealth(amount: int):
+	currentHealth -= amount
 	if currentHealth <= maxHealth/4:
 		healthBar.set("custom_colors/default_color", Color(1, 0, 0))
 	healthBar.text = "Health " + str(currentHealth)
@@ -46,6 +46,6 @@ func is_inside_screen(position: Vector2) -> bool:
 	#print(viewport_size)
 	var delta = 10
 	var value = position.y > delta and position.y < viewport_size.y - delta
-	print(value)
+	#print(value)
 	return value
 

@@ -1,5 +1,7 @@
 extends Node2D
 
+export var mytype: String = "heroBullet"
+
 var bulletSpeed=300
 onready var gameManager = get_parent()
 
@@ -16,6 +18,9 @@ func _process(delta):
 		queue_free()
 
 func _on_Area2D_area_entered(area):
-	if area.get_parent().is_in_group("Aliens"):
-		area.get_parent().hit()
+	var parent = area.get_parent()
+	if parent.is_in_group("Aliens"):
+		parent.hit()
+		queue_free()
+	elif "mytype" in parent and parent.mytype == "alienBullet":
 		queue_free()
